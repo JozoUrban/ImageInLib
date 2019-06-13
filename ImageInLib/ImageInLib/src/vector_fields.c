@@ -4,11 +4,14 @@
 /*
 * Function generating 3D vector field
 */
-void generate3DVector(Point3D ** vectorPtr, ImageData inputPtr, vectorParameters vectorVariables, enum finiteDifference fieldDirection, dataType coeff)
+void generate3DVector(Point3D ** vectorPtr, Image_Data inputPtr, Vector_Parameters vectorVariables, enum FiniteDifference fieldDirection, dataType coeff)
 {
-	size_t k, x, height = inputPtr.height, _width = inputPtr.length, p = vectorVariables.p, h = vectorVariables.h;
+	size_t k, x;
+	const size_t height = inputPtr.height, _width = inputPtr.length, p = vectorVariables.p;
+	dataType h = vectorVariables.h;
+
 	// Mid center Pointers Pointers for the 3 Dimensions
-	vectorDirection zCent = { NULL }, xCent = { NULL }, yCent = { NULL };
+	Vector_Direction zCent = { NULL }, xCent = { NULL }, yCent = { NULL };
 	// Calculate the Mid center before
 	for (k = p; k <= height + p; k++)
 	{
@@ -16,8 +19,8 @@ void generate3DVector(Point3D ** vectorPtr, ImageData inputPtr, vectorParameters
 		{
 			// 2D to 3D representation for i, j
 			// Assuming dim i = dim j ...
-			int i = floor(x / _width);
-			int j = floor((x - i) / _width);
+			int i = (int)floor((double)x / _width + 0.5);
+			int j = (int)floor((double)(x - i) / _width + 0.5);
 			// Fill the central pointers
 			xCent.fieldPtr[k][x] = (inputPtr.imageDataPtr[k][x] + inputPtr.imageDataPtr[k][x_new(i - 1, j - 1, _width)] + inputPtr.imageDataPtr[k][x_new(i, j - 1, _width)] + inputPtr.imageDataPtr[k][x_new(i - 1, j, _width)]) / 4;
 			yCent.fieldPtr[k][x] = (inputPtr.imageDataPtr[k][x] + inputPtr.imageDataPtr[k - 1][x_new(i - 1, j, _width)] + inputPtr.imageDataPtr[k - 1][x] + inputPtr.imageDataPtr[k][x_new(i - 1, j, _width)]) / 4;
@@ -33,10 +36,10 @@ void generate3DVector(Point3D ** vectorPtr, ImageData inputPtr, vectorParameters
 		{
 			// 2D to 3D representation for i, j
 			// Assuming dim i = dim j ...
-			int i = floor(x / _width);
-			int j = floor((x - i) / _width);
+			int i = (int)floor((double)x / _width + 0.5);
+			int j = (int)floor((double)(x - i) / _width + 0.5);
 			// Checks the direction passed and fill values for that
-			if (fieldDirection == FORWARD)
+			if (fieldDirection == FINITE_FORWARD)
 			{
 				// East
 				xD = (inputPtr.imageDataPtr[k][x_new(i, j + 1, _width)] - inputPtr.imageDataPtr[k][x]) / h;
@@ -54,7 +57,7 @@ void generate3DVector(Point3D ** vectorPtr, ImageData inputPtr, vectorParameters
 				zD = (zCent.fieldPtr[k + 1][x_new(i, j + 1, _width)] - zCent.fieldPtr[k + 1][x]) / h;// X Direction
 				vectorPtr[k][x].z = gradientFunction(xD*xD + yD * yD + zD * zD, coeff);
 			}
-			else if (fieldDirection == BACKWARD)
+			else if (fieldDirection == FINITE_BACKWARD)
 			{
 				// West
 				xD = (inputPtr.imageDataPtr[k][x] - inputPtr.imageDataPtr[k][x_new(i, j - 1, _width)]) / h;
@@ -72,7 +75,7 @@ void generate3DVector(Point3D ** vectorPtr, ImageData inputPtr, vectorParameters
 				zD = (zCent.fieldPtr[k][x_new(i, j + 1, _width)] - zCent.fieldPtr[k][x]) / h;// X Direction
 				vectorPtr[k][x].z = gradientFunction(xD*xD + yD * yD + zD * zD, coeff);
 			}
-			else if (fieldDirection == CENTRAL)
+			else if (fieldDirection == FINITE_CENTRAL)
 			{
 				vectorPtr[k][x].x = 0;
 				vectorPtr[k][x].y = 0;

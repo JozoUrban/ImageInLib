@@ -138,7 +138,7 @@
     <Filter Include="Source Files\Interfaces\Transformation">
       <UniqueIdentifier>{8201d67c-8a94-4a8d-adf5-ab933b35ba98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\File Management\Distance Function">
+    <Filter Include="Source Files\Distance Function">
       <UniqueIdentifier>{529cb28c-1d6e-4db1-b6e6-3b2fe6d8cc75}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -228,19 +228,19 @@
       <Filter>Source Files\File Management</Filter>
     </ClCompile>
     <ClCompile Include="src\brute_force_algorithm.c">
-      <Filter>Source Files\File Management\Distance Function</Filter>
+      <Filter>Source Files\Distance Function</Filter>
     </ClCompile>
     <ClCompile Include="src\fast_marching.c">
-      <Filter>Source Files\File Management\Distance Function</Filter>
+      <Filter>Source Files\Distance Function</Filter>
     </ClCompile>
     <ClCompile Include="src\fast_sweeping_method.c">
-      <Filter>Source Files\File Management\Distance Function</Filter>
+      <Filter>Source Files\Distance Function</Filter>
     </ClCompile>
     <ClCompile Include="src\procrustrates_dist.c">
-      <Filter>Source Files\File Management\Distance Function</Filter>
+      <Filter>Source Files\Distance Function</Filter>
     </ClCompile>
     <ClCompile Include="src\rouy_tourin_function.c">
-      <Filter>Source Files\File Management\Distance Function</Filter>
+      <Filter>Source Files\Distance Function</Filter>
     </ClCompile>
     <ClCompile Include="src\linked_list.c">
       <Filter>Source Files\Data Structures</Filter>
@@ -283,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="src\shapeGeneration.c">
       <Filter>Source Files\Interfaces\Shape Generation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common_vtk.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,9 +394,6 @@
     <ClInclude Include="src\vtk_params.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="src\distanceMaps.h">
-      <Filter>Header Files\Interfaces\Distance Functions</Filter>
-    </ClInclude>
     <ClInclude Include="include\file.h">
       <Filter>Header Files\Interfaces\File Management</Filter>
     </ClInclude>
@@ -417,6 +417,12 @@
     </ClInclude>
     <ClInclude Include="include\statistics.h">
       <Filter>Header Files\Interfaces\Statistics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\distanceMaps.h">
+      <Filter>Header Files\Interfaces\Distance Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common_vtk.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

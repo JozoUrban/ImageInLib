@@ -3,12 +3,13 @@
 * Purpose: ImageInLife project - 4D Image Segmentation Methods
 * Language:  C
 */
-#include <stdio.h>
-#include "data_load.h"
 #include "common_functions.h"
+#include "data_load.h"
+#include <stdio.h>
+#include <string.h>
 
 bool load3dDataArrayVTK(unsigned char ** imageDataPtr, const size_t imageLength, const size_t imageWidth,
-	const size_t imageHeight, unsigned char * pathPtr, VTKHeaderLines * lines)
+	const size_t imageHeight, unsigned char * pathPtr, VTK_Header_Lines * lines)
 {
 	//checks if the memory was allocated
 	if (imageDataPtr == NULL)
@@ -89,7 +90,7 @@ bool load3dDataArrayD(dataType ** imageDataPtr, const size_t imageLength, const 
 }
 
 bool load3dDataArrayRAW(dataType ** imageDataPtr, const size_t imageLength, const size_t imageWidth,
-	const size_t imageHeight, unsigned char * pathPtr, loadDataType dType)
+	const size_t imageHeight, unsigned char * pathPtr, LoadDataType dType)
 {
 	//checks if the memory was allocated
 	if (imageDataPtr == NULL)
@@ -105,11 +106,11 @@ bool load3dDataArrayRAW(dataType ** imageDataPtr, const size_t imageLength, cons
 
 	if (dType == BINARY_DATA)
 	{
-		strcpy(rmode, "rb");
+		strcpy_s(rmode, sizeof(rmode), "rb");
 	}
 	else if (dType == ASCII_DATA)
 	{
-		strcpy(rmode, "r");
+		strcpy_s(rmode, sizeof(rmode), "r");
 	}
 	else
 	{
@@ -137,10 +138,7 @@ bool load3dDataArrayRAW(dataType ** imageDataPtr, const size_t imageLength, cons
 					}
 					else if (dType == ASCII_DATA)
 					{
-						// Old
-						//fscanf(file, "%d", &value);
-						// New
-						fscanf_s(file, "%d", &value, sizeof(value));
+						fscanf_s(file, "%d", &value);
 						imageDataPtr[k][xd] = (dataType)value;
 					}
 				}
