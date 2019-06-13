@@ -27,11 +27,12 @@ void transform3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr, Point
 {
 	size_t k, i, j;
 	// Creates a new Pointer to fill the transformed values
-	dataType ** transformPointsPtr = malloc(imageHeight * sizeof(dataType));
+	dataType ** transformPointsPtr = (dataType **)malloc(imageHeight * sizeof(dataType *));
 
 	dataType k_a, i_a, j_a; // Affine indices
-						  // Rotation Angles -
-	dataType theta = (rotation.y*M_PI) / 180, psi = (rotation.z*M_PI) / 180, phi = (rotation.x*M_PI) / 180;
+	// Rotation Angles -
+	//dataType theta = (rotation.y*M_PI) / 180, psi = (rotation.z*M_PI) / 180, phi = (rotation.x*M_PI) / 180;
+	dataType theta = (rotation.y), psi = (rotation.z), phi = (rotation.x);
 	// Center Points
 	//int hcenter = floor(imageHeight / 2), lcenter = floor(imageLength / 2), wcenter = floor(imageWidth / 2);
 	dataType cz = centroid[2], cx = centroid[0], cy = centroid[1];
@@ -46,7 +47,7 @@ void transform3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr, Point
 	dataType k_t, i_t, j_t; // Transformed indices
 	for (k = 0; k < imageHeight; k++)
 	{
-		transformPointsPtr[k] = malloc(dimWidth * sizeof(dataType));
+		transformPointsPtr[k] = (dataType *)malloc(dimWidth * sizeof(dataType));
 		k_a = k - cz; // Move to origin Z
 		for (i = 0; i < imageLength; i++)
 		{
@@ -100,14 +101,6 @@ void transform3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr, Point
 				if (bottom >= 0 && top < imageHeight && left >= 0 && right < imageLength && begin >= 0 && end < imageWidth)
 				{
 					tmp = interpolated(k_t, i_t, j_t, top, bottom, left, right, begin, end, sourceDataPtr, imageLength);
-					if (tmp > (bgValue / 2))
-					{
-						tmp = bgValue;
-					}
-					else
-					{
-						tmp = 0;
-					}
 					transformPointsPtr[k][x] = tmp;
 				}
 				else
@@ -138,7 +131,7 @@ void transformInverse3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr
 {
 	size_t k, i, j;
 	// Creates a new Pointer to fill the transformed values
-	dataType ** transformPointsPtr = malloc(imageHeight * sizeof(dataType));
+	dataType ** transformPointsPtr = (dataType **)malloc(imageHeight * sizeof(dataType *));
 
 	dataType k_a, i_a, j_a; // Affine indices
 						  // Rotation Angles -
@@ -156,7 +149,7 @@ void transformInverse3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr
 	dataType k_t, i_t, j_t; // Transformed indices
 	for (k = 0; k < imageHeight; k++)
 	{
-		transformPointsPtr[k] = malloc(dimWidth * sizeof(dataType));
+		transformPointsPtr[k] = (dataType *)malloc(dimWidth * sizeof(dataType));
 		k_a = k - cz; // Move to origin Z
 		for (i = 0; i < imageLength; i++)
 		{
@@ -210,14 +203,6 @@ void transformInverse3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr
 				if (bottom >= 0 && top < imageHeight && left >= 0 && right < imageLength && begin >= 0 && end < imageWidth)
 				{
 					tmp = interpolated(k_t, i_t, j_t, top, bottom, left, right, begin, end, sourceDataPtr, imageLength);
-					if (tmp > (bgValue / 2))
-					{
-						tmp = bgValue;
-					}
-					else
-					{
-						tmp = 0;
-					}
 					transformPointsPtr[k][x] = tmp;
 				}
 				else
@@ -287,7 +272,7 @@ dataType interpolated(dataType k_t, dataType i_t, dataType j_t, int top, int bot
 	dataType c100 = imageDataPtr[top][x_new(right, begin, imageLength)];
 	dataType c101 = imageDataPtr[bottom][x_new(right, begin, imageLength)];
 	dataType c110 = imageDataPtr[top][x_new(right, end, imageLength)];
-	dataType c111 = imageDataPtr[bottom][x_new(right, end, imageLength)];;
+	dataType c111 = imageDataPtr[bottom][x_new(right, end, imageLength)];
 
 	return trilinearInterpolation(i_t, left, right, j_t, begin, end, c000, c001, c010, c011, c100, c101, c110, c111, k_t, bottom, top);
 }

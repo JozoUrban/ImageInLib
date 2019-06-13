@@ -260,3 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 *.txt
+/ImageInLib/external_libs/vtk/lib64
+/ImageInLib/external_libs/vtk/include
+/ImageInLib/external_libs/vtk/.build/lib64/vtk.tlog

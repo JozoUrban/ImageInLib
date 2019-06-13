@@ -35,7 +35,7 @@ bool fastSweepingFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr, 
 
 	if (curve3DPtr == NULL)
 		return false;
-	
+
 	//Checks for 2D case
 	if (zDim == 1)
 		return false;
@@ -59,7 +59,6 @@ bool fastSweepingFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr, 
 			}
 		}
 	}
-
 
 	//Main loop for eight sweeps
 	while (sweepNumber < 8)
@@ -147,8 +146,11 @@ bool fastSweepingFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr, 
 						}
 					}
 				}
-				sweepNumber++;
-				break;
+				if (k == 0) //because if k is unsigned type, then k(0) - 1 == type maximum value
+					break;
+			}
+			sweepNumber++;
+			break;
 		case 4:
 			for (k = (zDim - 1); k >= 0; k--)
 			{
@@ -211,7 +213,7 @@ bool fastSweepingFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr, 
 						if (j == 0) //because if j is unsigned type, then j(0) - 1 == type maximum value
 							break;
 					}
-					
+
 					if (i == 0) //because if i is unsigned type, then i(0) - 1 == type maximum value
 						break;
 				}
@@ -238,7 +240,6 @@ bool fastSweepingFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr, 
 			}
 			sweepNumber++;
 			break;
-			}
 		}
 	}
 	for (i = 0; i < zDim; i++)
@@ -249,8 +250,8 @@ bool fastSweepingFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr, 
 	free(temp3dPtr);
 	return true;
 }
-	
-bool fastSweepingFunction_2D(dataType * distance2DPtr, dataType * curve2DPtr, const size_t xDim, const size_t yDim, 
+
+bool fastSweepingFunction_2D(dataType * distance2DPtr, dataType * curve2DPtr, const size_t xDim, const size_t yDim,
 	const dataType h, const dataType largeValue, const dataType fgroundValue)
 {
 	size_t j, i, i_n;//i and k are loop counters. i_n is also a loop counter given by i_n = i + j * xDim
@@ -337,7 +338,7 @@ bool fastSweepingFunction_2D(dataType * distance2DPtr, dataType * curve2DPtr, co
 						break;
 				}
 				if (i == 0) //because if i is unsigned type, then i(0) - 1 == type maximum value
-						break;
+					break;
 			}
 			sweepNumber++;
 			break;
@@ -354,12 +355,12 @@ bool fastSweepingFunction_2D(dataType * distance2DPtr, dataType * curve2DPtr, co
 					}
 				}
 				if (i == 0) //because if i is unsigned type, then i(0) - 1 == type maximum value
-						break;
+					break;
 			}
 			sweepNumber++;
 			break;
 		}
-	} 
+	}
 
 	free(temp2dPtr);
 	return true;
@@ -402,7 +403,7 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 			b = min(distance3DPtr[k][i_n], distance3DPtr[k][i_n + xDim]);
 			c = min(distance3DPtr[k][i_n], distance3DPtr[k + 1][i_n]);
 		}
-		else if ((i_n >((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
+		else if ((i_n > ((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
 		{//(excluding left and right corner), use one sided difference.
 			a = min(distance3DPtr[k][i_n - 1], distance3DPtr[k][i_n + 1]);
 			b = min(distance3DPtr[k][i_n - xDim], distance3DPtr[k][i_n]);
@@ -421,7 +422,6 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 			c = min(distance3DPtr[k][i_n], distance3DPtr[k + 1][i_n]);
 		}
 		else {//otherwise, use one sided difference.
-
 			a = min(distance3DPtr[k][i_n - 1], distance3DPtr[k][i_n + 1]);
 			b = min(distance3DPtr[k][i_n - xDim], distance3DPtr[k][i_n + xDim]);
 			c = min(distance3DPtr[k][i_n], distance3DPtr[k + 1][i_n]);
@@ -460,7 +460,7 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 			b = min(distance3DPtr[k][i_n], distance3DPtr[k][i_n + xDim]);
 			c = min(distance3DPtr[k - 1][i_n], distance3DPtr[k][i_n]);
 		}
-		else if ((i_n >((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
+		else if ((i_n > ((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
 		{//(excluding left and right corner), use one sided difference.
 			a = min(distance3DPtr[k][i_n - 1], distance3DPtr[k][i_n + 1]);
 			b = min(distance3DPtr[k][i_n - xDim], distance3DPtr[k][i_n]);
@@ -479,7 +479,6 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 			c = min(distance3DPtr[k - 1][i_n], distance3DPtr[k][i_n]);
 		}
 		else {//otherwise, use one sided difference.
-
 			a = min(distance3DPtr[k][i_n - 1], distance3DPtr[k][i_n + 1]);
 			b = min(distance3DPtr[k][i_n - xDim], distance3DPtr[k][i_n + xDim]);
 			c = min(distance3DPtr[k - 1][i_n], distance3DPtr[k][i_n]);
@@ -518,7 +517,7 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 			b = min(distance3DPtr[k][i_n], distance3DPtr[k][i_n + xDim]);
 			c = min(distance3DPtr[k - 1][i_n], distance3DPtr[k + 1][i_n]);
 		}
-		else if ((i_n >((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
+		else if ((i_n > ((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
 		{//(excluding left and right corner), use one sided difference.
 			a = min(distance3DPtr[k][i_n - 1], distance3DPtr[k][i_n + 1]);
 			b = min(distance3DPtr[k][i_n - xDim], distance3DPtr[k][i_n]);
@@ -537,23 +536,21 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 			c = min(distance3DPtr[k - 1][i_n], distance3DPtr[k + 1][i_n]);
 		}
 		else {//otherwise, use one sided difference.
-
 			a = min(distance3DPtr[k][i_n - 1], distance3DPtr[k][i_n + 1]);
 			b = min(distance3DPtr[k][i_n - xDim], distance3DPtr[k][i_n + xDim]);
 			c = min(distance3DPtr[k - 1][i_n], distance3DPtr[k + 1][i_n]);
 		}
 	}
 
-
 	a_1 = -max(-a, max(-b, -c)); // min
-	a_3 = max(a, max(b, c)); // max	
+	a_3 = max(a, max(b, c)); // max
 	a_2 = (a + b + c) - (a_3 + a_1);//mid
 	temp3dPtr[k][i_n] = a_1 + h;
 
 	if (temp3dPtr[k][i_n] < a_2)
 	{
 		distance3DPtr[k][i_n] = temp3dPtr[k][i_n];
-	}		
+	}
 	else
 	{
 		if (fabs(a_1 - a_2) >= h)
@@ -563,15 +560,15 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 		else
 		{
 			temp3dPtr[k][i_n] = (double)(a_1 + a_2 + sqrt((2 * h * h) - (pow((a_1 - a_2), 2)))) / 2;
-		}		
+		}
 		if (temp3dPtr[k][i_n] < a_3)
 		{
 			distance3DPtr[k][i_n] = temp3dPtr[k][i_n];
 		}
-		else 
+		else
 		{
 			lastCheck = 2 * ((a_1 * a_1) + (a_2 * a_2) + (a_3 * a_3) - ((a_1 * a_2) + (a_1 * a_3) + (a_2 * a_3)));
-			if (lastCheck <= (3 * h * h)) 
+			if (lastCheck <= (3 * h * h))
 			{
 				temp3dPtr[k][i_n] = (double)(a_1 + a_2 + a_3 + sqrt((3 * h * h) - lastCheck)) / 3;
 			}
@@ -582,7 +579,7 @@ dataType compute3dDistance(size_t i_n, size_t k, const size_t xDim, const size_t
 }
 
 //Computation of distance in 2D
-double compute2dDistance(size_t i_n, const size_t xDim, const size_t yDim, dataType *distance2DPtr, dataType *temp2dPtr, const size_t dim2D,
+dataType compute2dDistance(size_t i_n, const size_t xDim, const size_t yDim, dataType *distance2DPtr, dataType *temp2dPtr, const size_t dim2D,
 	const dataType h)
 {
 	dataType a, b;
@@ -611,7 +608,7 @@ double compute2dDistance(size_t i_n, const size_t xDim, const size_t yDim, dataT
 		a = min(distance2DPtr[i_n - 1], distance2DPtr[i_n + 1]);
 		b = min(distance2DPtr[i_n], distance2DPtr[i_n + xDim]);
 	}
-	else if ((i_n >((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
+	else if ((i_n > ((yDim - 1) * xDim)) && (i_n < (dim2D - 1))) //if at last row
 	{//(excluding left and right corner), use one sided difference.
 		a = min(distance2DPtr[i_n - 1], distance2DPtr[i_n + 1]);
 		b = min(distance2DPtr[i_n - xDim], distance2DPtr[i_n]);
@@ -627,11 +624,10 @@ double compute2dDistance(size_t i_n, const size_t xDim, const size_t yDim, dataT
 		b = min(distance2DPtr[i_n - xDim], distance2DPtr[i_n + xDim]);
 	}
 	else {//otherwise, use one sided difference.
-
 		a = min(distance2DPtr[i_n - 1], distance2DPtr[i_n + 1]);
 		b = min(distance2DPtr[i_n - xDim], distance2DPtr[i_n + xDim]);
 	}
-	
+
 	// calculation of distance
 	if (fabs(a - b) >= h)
 	{
