@@ -16,11 +16,12 @@ bool ballsOnHelix(dataType ** image3DPtr, dataType radius, size_t xDim, size_t y
 	if (image3DPtr == NULL)
 		return false;
 
-	dataType t, pi;
-	pi = 2 * M_PI * pitch;// * pitch
+	dataType t;
+	const dataType pi = (dataType)(2.0 * M_PI * (double)pitch);// * pitch
+	const dataType stepSize = (dataType)0.6;
 	Point3D ballCenter;
 
-	for (t = 0; t <= pi; t += 0.6)
+	for (t = 0; t <= pi; t += stepSize)
 	{
 		ballCenter.x = (dataType)((xDim/2) + radius * cos(t));
 		ballCenter.y = (dataType)((yDim/2) + radius * sin(t));

@@ -17,11 +17,12 @@ bool ballsOnCircle(dataType ** image3DPtr, dataType radius, size_t xDim, size_t 
 	if (image3DPtr == NULL)
 		return false;
 
-	dataType pi, t;
-	pi = 2 * M_PI;
+	dataType t;
+	const dataType pi = 2.0 * (dataType)M_PI;
+	const dataType stepSize = (dataType)0.06;
 	Point3D ballCenter;
 
-	for (t = 0; t <= pi; t += 0.06)
+	for (t = 0; t <= pi; t += stepSize)
 	{
 		ballCenter.x = (dataType)(xCordctr + radius * cos(t));
 		ballCenter.y = (dataType)(yCordctr + radius * sin(t));

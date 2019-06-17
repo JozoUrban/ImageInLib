@@ -11,7 +11,7 @@
 /*
 * Function to fill the points of Cuboid (block)
 */
-void fillBlock3D(double **inputDataArrayPtr, size_t inputHeight, size_t inputLength, size_t inputWidth, Point3D blockCorner, double *fillBlockDimension, double fillValue)
+void fillBlock3D(dataType **inputDataArrayPtr, size_t inputHeight, size_t inputLength, size_t inputWidth, Point3D blockCorner, double *fillBlockDimension, double fillValue)
 {
 	if (inputHeight < 1 || inputWidth < 1 || inputLength < 1)
 		return;
@@ -45,7 +45,7 @@ void fillBlock3D(double **inputDataArrayPtr, size_t inputHeight, size_t inputLen
 /*
 * Function to fill 3D Ball Shape Points
 */
-void fillBall3D(double **inputDataArrayPtr, size_t inputHeight, size_t inputLength, size_t inputWidth, double sphereRadius, Point3D sphereCenter, double fillValue)
+void fillBall3D(dataType **inputDataArrayPtr, size_t inputHeight, size_t inputLength, size_t inputWidth, double sphereRadius, Point3D sphereCenter, double fillValue)
 {
 	// Variables to be used to loop
 	size_t k, i, j;
@@ -86,12 +86,13 @@ bool generateSphereWithSixHoles(dataType ** dataArray3D, Point3D center, size_t 
 		return false;
 
 	size_t i, j, k, s;
+	double dX, dY, dZ;
 	dataType phi, theta, r = sphereRadius;
 	dataType point_in_circleX, point_in_circleY, point_in_circleZ;
 
-	center.x = (dataType)(length / 2);
-	center.y = (dataType)(width / 2);
-	center.z = (dataType)(height / 2);
+	center.x = (dataType)(length / 2.0);
+	center.y = (dataType)(width / 2.0);
+	center.z = (dataType)(height / 2.0);
 
 	//Initialization of arrays
 	if (fillValue == 255)
@@ -110,10 +111,14 @@ bool generateSphereWithSixHoles(dataType ** dataArray3D, Point3D center, size_t 
 			j = (size_t)(center.y + r * sin(phi)*sin(theta));
 			k = (size_t)(center.z + r * cos(theta));
 
+			dX = pow(((double)i - center.x),2);
+			dY = pow(((double)j - center.y),2);
+			dZ = pow(((double)k - center.z),2);
+
 			// Calculates distance
-			point_in_circleX = sqrt(((i - center.x)*(i - center.x) + (j - center.y)*(j - center.y)));
-			point_in_circleY = sqrt(((i - center.x)*(i - center.x) + (k - center.z)*(k - center.z)));
-			point_in_circleZ = sqrt(((k - center.z)*(k - center.z) + (j - center.y)*(j - center.y)));
+			point_in_circleX = (dataType)sqrt(dX + dY);
+			point_in_circleY = (dataType)sqrt(dX + dZ);
+			point_in_circleZ = (dataType)sqrt(dZ + dY);
 			// 2D to 1D representation
 			s = x_new(i, j, length);
 			// Insertion of tube to through the sphere
