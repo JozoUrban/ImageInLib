@@ -33,29 +33,38 @@ bool bruteForceFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr,
 	Point3D * surface_points = malloc(sizeof(Point3D) * zDim * dim2D);
 	size_t ptsNum = 0;
 
+	if (surface_points == NULL) {
+		return false;
+	}
+
+	dataType x, y, z;
+
 	for (k_2 = 0; k_2 < zDim; k_2++) // z axis of the input surface or image
 	{
 		for (i_2 = 0; i_2 < dim2D; i_2++)// x-y axis of the input surface or image
 		{
 			if (curve3DPtr[k_2][i_2] == fgroundValue)
 			{
-				surface_points[ptsNum].x = (int)(i_2 / xDim);
-				surface_points[ptsNum].y = (dataType)(i_2 % xDim);
-				surface_points[ptsNum].z = (dataType)k_2;
+				x = (dataType)(i_2 / xDim);
+				y = (dataType)(i_2 % xDim);
+				z = (dataType)k_2;
+
+				surface_points[ptsNum].x = x;
+				surface_points[ptsNum].y = y;
+				surface_points[ptsNum].z = z;
 				ptsNum++;
 			}
 		}
 	}
 
 
-	for (k_1 = 0; k_1 < zDim; k_1++) // z axis of the original image
+	for (size_t k_1 = 0; k_1 < zDim; k_1++) // z axis of the original image
 	{
-		for (i_1 = 0; i_1 < dim2D; i_1++)// x-y axis of the original image 
+		for (size_t i_1 = 0; i_1 < dim2D; i_1++)// x-y axis of the original image 
 		{
 			for (size_t i = 0; i < ptsNum; i++)
 			{
-				dz = k_1 - surface_points[i].z; // difference between z axes of both images
-
+				dz = (dataType)k_1 - surface_points[i].z; // difference between z axes of both images
 				dx = (int)(i_1 / xDim) - surface_points[i].x;// difference between x axes of both images
 				dy = (i_1 % xDim) - surface_points[i].y;// difference between y axes of both images
 				dist = dx * dx + dy * dy + dz * dz;
@@ -71,7 +80,7 @@ bool bruteForceFunction_3D(dataType ** distance3DPtr, dataType ** curve3DPtr,
 	{
 		for (i_1 = 0; i_1 < dim2D; i_1++)// x-y axis of the original image 
 		{
-			distance3DPtr[k_1][i_1] = sqrt(distance3DPtr[k_1][i_1]);
+			distance3DPtr[k_1][i_1] = (dataType)sqrt(distance3DPtr[k_1][i_1]);
 		}
 	}
 
