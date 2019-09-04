@@ -135,7 +135,10 @@ void transformInverse3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr
 
 	dataType k_a, i_a, j_a; // Affine indices
 						  // Rotation Angles -
-	dataType theta = (rotation.y*M_PI) / 180, psi = (rotation.z*M_PI) / 180, phi = (rotation.x*M_PI) / 180;
+	double scaleAngle = M_PI / 180;
+	dataType theta = (dataType)(rotation.y * scaleAngle),
+		psi = (dataType)(rotation.z * scaleAngle),
+		phi = (dataType)(rotation.x * scaleAngle);
 	// Center Points
 	//int hcenter = floor(imageHeight / 2), lcenter = floor(imageLength / 2), wcenter = floor(imageWidth / 2);
 	dataType cz = centroid[2], cx = centroid[0], cy = centroid[1];
@@ -234,32 +237,51 @@ void transformInverse3DImage(dataType ** sourceDataPtr, dataType ** imageDataPtr
 */
 dataType x_rotate(dataType z, dataType x, dataType y, dataType theta, dataType psi)
 {
-	return (x*cos(psi)*cos(theta) - y * cos(theta)*sin(psi) + z * sin(theta));
+	return (dataType)((double)x*cos((double)psi)*cos((double)theta) - 
+		(double)y * cos((double)theta)*sin((double)psi) + (double)z * sin((double)theta));
 }
 // Inverse
 dataType x_rotateInv(dataType z, dataType x, dataType y, dataType theta, dataType psi, dataType phi)
 {
-	return (cos(theta)*cos(psi))*(x)+((cos(phi))*sin(psi) + sin(phi)*sin(theta)*cos(psi))*(y)+(sin(phi)*sin(psi) + cos(phi)*(-sin(theta))*cos(psi))*(z);
+	return (dataType)((cos((double)theta)*cos((double)psi))*((double)x) +
+		((cos((double)phi))*sin((double)psi) +
+			sin((double)phi)*sin((double)theta)*cos((double)psi))*((double)y) +
+			(sin((double)phi)*sin((double)psi) +
+				cos((double)phi)*(-sin((double)theta))*cos((double)psi))*((double)z));
 }
 //==============================================================================
 dataType y_rotate(dataType z, dataType x, dataType y, dataType theta, dataType psi, dataType phi)
 {
-	return (((cos(phi))*sin(psi) + sin(phi)*sin(theta)*cos(psi))*(x)+(cos(phi)*cos(psi) + sin(phi)*sin(theta)*(-sin(psi)))*(y)+((-sin(phi))*cos(theta))*(z));
+	return (dataType)(((cos((double)phi))*sin((double)psi) +
+		sin((double)phi)*sin((double)theta)*cos((double)psi))*((double)x) +
+		(cos((double)phi)*cos((double)psi) +
+			sin((double)phi)*sin((double)theta)*(-sin((double)psi)))*((double)y) +
+			((-sin((double)phi))*cos((double)theta))*((double)z));
 }
 //==============================================================================
 dataType y_rotateInv(dataType z, dataType x, dataType y, dataType theta, dataType psi, dataType phi)
 {
-	return ((cos(theta)*(-sin(psi)))*(x)+(cos(phi)*cos(psi) + sin(phi)*sin(theta)*(-sin(psi)))*(y)+((sin(phi))*cos(psi) + cos(phi)*sin(theta)*sin(psi))*(z));
+	return (dataType)((cos((double)theta)*(-sin((double)psi)))*((double)x) +
+		(cos((double)phi)*cos((double)psi) +
+			sin((double)phi)*sin((double)theta)*(-sin((double)psi)))*((double)y) +
+			((sin((double)phi))*cos((double)psi) +
+				cos((double)phi)*sin((double)theta)*sin((double)psi))*((double)z));
 }
 //==============================================================================
 dataType z_rotate(dataType z, dataType x, dataType y, dataType theta, dataType psi, dataType phi)
 {
-	return ((sin(phi)*sin(psi) + cos(phi)*(-sin(theta))*cos(psi))*(x)+((sin(phi))*cos(psi) + cos(phi)*sin(theta)*sin(psi))*(y)+(cos(phi)*cos(theta))*(z));
+	return (dataType)((sin((double)phi)*sin((double)psi) +
+		cos((double)phi)*(-sin((double)theta))*cos((double)psi))*((double)x) +
+		((sin((double)phi))*cos((double)psi) +
+			cos((double)phi)*sin((double)theta)*sin((double)psi))*((double)y) +
+			(cos((double)phi)*cos((double)theta))*((double)z));
 }
 //==============================================================================
 dataType z_rotateInv(dataType z, dataType x, dataType y, dataType theta, dataType psi, dataType phi)
 {
-	return ((sin(theta))*(x)+((-sin(phi))*cos(theta))*(y)+(cos(phi)*cos(theta))*(z));
+	return (dataType)((sin((double)theta))*((double)x) +
+		((-sin((double)phi))*cos((double)theta))*((double)y) +
+		(cos((double)phi)*cos((double)theta))*((double)z));
 }
 //==============================================================================
 dataType interpolated(dataType k_t, dataType i_t, dataType j_t, int top, int bottom, int left, int right, int begin, int end, dataType ** imageDataPtr, size_t imageLength)
@@ -274,6 +296,9 @@ dataType interpolated(dataType k_t, dataType i_t, dataType j_t, int top, int bot
 	dataType c110 = imageDataPtr[top][x_new(right, end, imageLength)];
 	dataType c111 = imageDataPtr[bottom][x_new(right, end, imageLength)];
 
-	return trilinearInterpolation(i_t, left, right, j_t, begin, end, c000, c001, c010, c011, c100, c101, c110, c111, k_t, bottom, top);
+	return trilinearInterpolation(i_t, (dataType)left, (dataType)right, 
+		j_t, (dataType)begin, (dataType)end, 
+		c000, c001, c010, c011, c100, c101, c110, c111, k_t, 
+		(dataType)bottom, (dataType)top);
 }
 //==============================================================================
